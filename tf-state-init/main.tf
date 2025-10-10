@@ -1,3 +1,4 @@
+
 provider "azurerm" {
   features {}
   subscription_id = "838d8d5b-1157-4504-a71d-1ef48775bbe3"
@@ -5,9 +6,7 @@ provider "azurerm" {
 
 
 
-
-
-resource "azurerm_automation_account" "example" {
+resource "azurerm_storage_account_account" "example" {
   name                      = "nravitsademoo1"
   resource_group_name       = "project-ecom"
   location                  = "East US"
