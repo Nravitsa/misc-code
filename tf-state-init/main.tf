@@ -6,7 +6,7 @@ provider "azurerm" {
 
 
 
-resource "azurerm_storage_account_account" "example" {
+resource "azurerm_storage_account" "example" {
   name                      = "nravitsademoo1"
   resource_group_name       = "project-ecom"
   location                  = "East US"
