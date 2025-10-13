@@ -6,7 +6,7 @@ provider "azurerm" {
 
 
 
-resource "azurerm_storage_account" "example" {
+resource "azurerm_storage_account" "tfstates" {
   name                      = "nravitsademoo1"
   resource_group_name       = "project-ecom"
   location                  = "East US"
@@ -17,6 +17,6 @@ resource "azurerm_storage_account" "example" {
 
 resource "azurerm_storage_container" "tfstates" {
   name                  = "roboshop-state-files"
-  storage_account_id    = azurerm_storage_account.example.id
+  storage_account_id    = azurerm_storage_account.tfstates.id
   container_access_type = "private"
 }
