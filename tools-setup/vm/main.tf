@@ -27,7 +27,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
+  source_image_id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourceGroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
 
 
 
@@ -83,7 +83,7 @@ resource "azurerm_network_interface_security_group_association" "nsg-attach" {
 #   # delete_data_disks_on_termination = true
 #
 #   storage_image_reference {
-#     id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
+#     id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourceGroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
 #   }
 #
 #   storage_os_disk {
