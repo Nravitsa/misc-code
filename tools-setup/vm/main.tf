@@ -5,20 +5,21 @@ resource "azurerm_public_ip" "publicip" {
   location            = var.rg_location
   resource_group_name = var.rg_name
   allocation_method   = "Dynamic"
+  sku                 = "Basic"
 
 }
 
 
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = var.name
-  resource_group_name = var.rg_name
-  location            = var.rg_location
-  size                = var.vm_size
-  admin_username = "tushar"
-  admin_password = "tushar@12345"
-  delete_os_disk_on_termination = true
-  network_interface_id      = azurerm_network_interface.privateip.id
+  name                  = var.name
+  resource_group_name   = var.rg_name
+  location              = var.rg_location
+  size                  = var.vm_size
+  admin_username        = "tushar"
+  admin_password        = "tushar@12345"
+  disable_password_authentication = false
+  network_interface_ids = [azurerm_network_interface.privateip.id]
 
   os_disk {
     name              = "${var.name}-disk"
@@ -26,9 +27,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_id {
-    id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
-  }
+  source_image_id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
+
 
 
   # Spot Details
@@ -108,6 +108,7 @@ resource "azurerm_network_interface_security_group_association" "nsg-attach" {
 
 
 resource "azurerm_dns_a_record" "public_dns_record" {
+  depends_on          = [azurerm_linux_virtual_machine.vm]
   name                = "${var.name}"
   zone_name           = "tusharbytes.com"
   resource_group_name = var.rg_name
