@@ -4,9 +4,50 @@ resource "azurerm_public_ip" "publicip" {
   name                = var.name
   location            = var.rg_location
   resource_group_name = var.rg_name
-  allocation_method   = "Static"
+  allocation_method   = "Dynamic"
 
 }
+
+
+
+resource "azurerm_linux_virtual_machine" "vm" {
+  name                = var.name
+  resource_group_name = var.rg_name
+  location            = var.rg_location
+  size                = var.vm_size
+  admin_username = "tushar"
+  admin_password = "tushar@12345"
+  delete_os_disk_on_termination = true
+  network_interface_id      = azurerm_network_interface.privateip.id
+
+  os_disk {
+    name              = "${var.name}-disk"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_id {
+    id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
+  }
+
+
+  # Spot Details
+  priority = "Spot"
+  eviction_policy = "Deallocate"
+  max_bid_price   = -1
+
+
+
+}
+
+
+
+
+
+
+
+
+
 
 resource "azurerm_network_interface" "privateip" {
   name                = var.name
@@ -27,37 +68,39 @@ resource "azurerm_network_interface_security_group_association" "nsg-attach" {
   network_security_group_id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourceGroups/project-ecom/providers/Microsoft.Network/networkSecurityGroups/allow-all"
 }
 
-resource "azurerm_virtual_machine" "vm" {
-  name                          = var.name
-  location                      = var.rg_location
-  resource_group_name           = var.rg_name
-  network_interface_ids         = [azurerm_network_interface.privateip.id]
-  vm_size                       = var.vm_size
-  delete_os_disk_on_termination = true
+######################### USING SPOT DISCOUNT  #########################
 
-
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  # delete_data_disks_on_termination = true
-
-  storage_image_reference {
-    id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
-  }
-
-  storage_os_disk {
-    name              = "${var.name}-disk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = var.name
-    admin_username = "tushar"
-    admin_password = "tushar@12345"
-  }
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-}
+# resource "azurerm_virtual_machine" "vm" {
+#   name                          = var.name
+#   location                      = var.rg_location
+#   resource_group_name           = var.rg_name
+#   network_interface_ids         = [azurerm_network_interface.privateip.id]
+#   vm_size                       = var.vm_size
+#   delete_os_disk_on_termination = true
+#
+#
+#   # Uncomment this line to delete the data disks automatically when deleting the VM
+#   # delete_data_disks_on_termination = true
+#
+#   storage_image_reference {
+#     id = "/subscriptions/838d8d5b-1157-4504-a71d-1ef48775bbe3/resourcegroups/project-ecom/providers/Microsoft.Compute/images/local-devops-practice"
+#   }
+#
+#   storage_os_disk {
+#     name              = "${var.name}-disk"
+#     caching           = "ReadWrite"
+#     create_option     = "FromImage"
+#     managed_disk_type = "Standard_LRS"
+#   }
+#   os_profile {
+#     computer_name  = var.name
+#     admin_username = "tushar"
+#     admin_password = "tushar@12345"
+#   }
+#   os_profile_linux_config {
+#     disable_password_authentication = false
+#   }
+# }
 
 
 
